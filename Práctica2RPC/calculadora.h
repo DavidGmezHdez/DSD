@@ -15,26 +15,26 @@ extern "C" {
 
 
 struct sumar_1_argument {
-	int arg1;
-	int arg2;
+	int a;
+	int b;
 };
 typedef struct sumar_1_argument sumar_1_argument;
 
 struct restar_1_argument {
-	int arg1;
-	int arg2;
+	int a;
+	int b;
 };
 typedef struct restar_1_argument restar_1_argument;
 
-struct multiplicacion_1_argument {
-	int arg1;
-	int arg2;
+struct multiplicar_1_argument {
+	int a;
+	int b;
 };
-typedef struct multiplicacion_1_argument multiplicacion_1_argument;
+typedef struct multiplicar_1_argument multiplicar_1_argument;
 
 struct dividir_1_argument {
-	int arg1;
-	int arg2;
+	int a;
+	int b;
 };
 typedef struct dividir_1_argument dividir_1_argument;
 
@@ -42,31 +42,31 @@ typedef struct dividir_1_argument dividir_1_argument;
 #define CALCVER 1
 
 #if defined(__STDC__) || defined(__cplusplus)
-#define sumar 1
+#define SUMAR 1
 extern  double * sumar_1(int , int , CLIENT *);
 extern  double * sumar_1_svc(int , int , struct svc_req *);
-#define restar 2
+#define RESTAR 2
 extern  double * restar_1(int , int , CLIENT *);
 extern  double * restar_1_svc(int , int , struct svc_req *);
-#define multiplicacion 3
-extern  double * multiplicacion_1(int , int , CLIENT *);
-extern  double * multiplicacion_1_svc(int , int , struct svc_req *);
-#define dividir 4
+#define MULTIPLICAR 3
+extern  double * multiplicar_1(int , int , CLIENT *);
+extern  double * multiplicar_1_svc(int , int , struct svc_req *);
+#define DIVIDIR 4
 extern  double * dividir_1(int , int , CLIENT *);
 extern  double * dividir_1_svc(int , int , struct svc_req *);
 extern int calculadora_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
-#define sumar 1
+#define SUMAR 1
 extern  double * sumar_1();
 extern  double * sumar_1_svc();
-#define restar 2
+#define RESTAR 2
 extern  double * restar_1();
 extern  double * restar_1_svc();
-#define multiplicacion 3
-extern  double * multiplicacion_1();
-extern  double * multiplicacion_1_svc();
-#define dividir 4
+#define MULTIPLICAR 3
+extern  double * multiplicar_1();
+extern  double * multiplicar_1_svc();
+#define DIVIDIR 4
 extern  double * dividir_1();
 extern  double * dividir_1_svc();
 extern int calculadora_1_freeresult ();
@@ -77,13 +77,13 @@ extern int calculadora_1_freeresult ();
 #if defined(__STDC__) || defined(__cplusplus)
 extern  bool_t xdr_sumar_1_argument (XDR *, sumar_1_argument*);
 extern  bool_t xdr_restar_1_argument (XDR *, restar_1_argument*);
-extern  bool_t xdr_multiplicacion_1_argument (XDR *, multiplicacion_1_argument*);
+extern  bool_t xdr_multiplicar_1_argument (XDR *, multiplicar_1_argument*);
 extern  bool_t xdr_dividir_1_argument (XDR *, dividir_1_argument*);
 
 #else /* K&R C */
 extern bool_t xdr_sumar_1_argument ();
 extern bool_t xdr_restar_1_argument ();
-extern bool_t xdr_multiplicacion_1_argument ();
+extern bool_t xdr_multiplicar_1_argument ();
 extern bool_t xdr_dividir_1_argument ();
 
 #endif /* K&R C */

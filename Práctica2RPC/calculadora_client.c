@@ -8,21 +8,12 @@
 
 
 void
-calculadora_1(char *host)
+calculadora_1(char *host, int ent1, char op, int ent2)
 {
 	CLIENT *clnt;
-	double  *result_1;
-	int sumar_1_arg1;
-	int sumar_1_arg2;
-	double  *result_2;
-	int restar_1_arg1;
-	int restar_1_arg2;
-	double  *result_3;
-	int multiplicacion_1_arg1;
-	int multiplicacion_1_arg2;
-	double  *result_4;
-	int dividir_1_arg1;
-	int dividir_1_arg2;
+	double  *result;
+	int entero1 = ent1, entero2 = ent2;
+	char operacion = op;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, CALCULADORA, CALCVER, "udp");
@@ -32,38 +23,53 @@ calculadora_1(char *host)
 	}
 #endif	/* DEBUG */
 
-	result_1 = sumar_1(sumar_1_arg1, sumar_1_arg2, clnt);
-	if (result_1 == (double *) NULL) {
-		clnt_perror (clnt, "call failed");
+	printf("\nRealizando la operacion %i %c %i \n",entero1,operacion,entero2);
+
+	switch(operacion){
+		case '+':
+			result = sumar_1(entero1,entero2,clnt);
+			printf("\nEl resultado de la suma ha sido: %f",*result);
+			break;
+		case '-':
+			result = restar_1(entero1,entero2,clnt);
+			printf("\nEl resultado de la resta ha sido: %f",*result);
+			break;
+		case '*':
+			result = multiplicar_1(entero1,entero2,clnt);
+			printf("\nEl resultado de la multiplicacion ha sido: %f",*result);
+			break;
+		case 'x':
+			result = multiplicar_1(entero1,entero2,clnt);
+			printf("\nEl resultado de la multiplicacion ha sido: %f",*result);
+			break;
+		case '/':
+			result = dividir_1(entero1,entero2,clnt);
+			printf("\nEl resultado de la division ha sido: %f",*result);
+			break;
 	}
-	result_2 = restar_1(restar_1_arg1, restar_1_arg2, clnt);
-	if (result_2 == (double *) NULL) {
-		clnt_perror (clnt, "call failed");
+
+	if(result == NULL){
+		clnt_perror(clnt,"RESULTADO INVALIDO");
 	}
-	result_3 = multiplicacion_1(multiplicacion_1_arg1, multiplicacion_1_arg2, clnt);
-	if (result_3 == (double *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
-	result_4 = dividir_1(dividir_1_arg1, dividir_1_arg2, clnt);
-	if (result_4 == (double *) NULL) {
-		clnt_perror (clnt, "call failed");
-	}
+
+
 #ifndef	DEBUG
 	clnt_destroy (clnt);
 #endif	 /* DEBUG */
 }
 
-
 int
 main (int argc, char *argv[])
 {
-	char *host;
-
-	if (argc < 2) {
-		printf ("usage: %s server_host\n", argv[0]);
-		exit (1);
+	if(argc < 5){
+		printf("Error: Falta de datos desde la erminal, la cadena de datos de entrada tiene que ser -> <host> <entero> <operacion> <entero> \n");
+		exit(1);
 	}
-	host = argv[1];
-	calculadora_1 (host);
-exit (0);
+	
+	char *host = argv[1];
+	int entero1 = atoi(argv[2]), entero2 = atoi(argv[4]);
+	char operacion = (char)argv[3][0];
+
+	calculadora_1(host,entero1,operacion,entero2);
+	exit(0);
 }

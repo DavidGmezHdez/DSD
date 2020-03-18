@@ -3,10 +3,10 @@
 
 program CALCULADORA{
     version CALCVER{
-        double sumar(int,int) = 1;
-        double restar(int, int) = 2;
-        double multiplicacion(int, int) = 3;
-        double dividir(int,int) = 4;
+        double SUMAR(int a, int b) = 1;
+        double RESTAR(int a, int b) = 2;
+        double MULTIPLICAR(int a, int b) = 3;
+        double DIVIDIR(int a, int b) = 4;
     } = 1;
 } = 0x20000001; 
 

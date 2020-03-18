@@ -23,7 +23,7 @@ restar_1_svc(int arg1, int arg2,  struct svc_req *rqstp)
 }
 
 double *
-multiplicacion_1_svc(int arg1, int arg2,  struct svc_req *rqstp)
+multiplicar_1_svc(int arg1, int arg2,  struct svc_req *rqstp)
 {
 	static double  result;
 	result = arg1 * arg2;

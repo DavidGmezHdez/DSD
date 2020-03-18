@@ -10,15 +10,15 @@
 static struct timeval TIMEOUT = { 25, 0 };
 
 double *
-sumar_1(int arg1, int arg2,  CLIENT *clnt)
+sumar_1(int a, int b,  CLIENT *clnt)
 {
 	sumar_1_argument arg;
 	static double clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	arg.arg1 = arg1;
-	arg.arg2 = arg2;
-	if (clnt_call (clnt, sumar, (xdrproc_t) xdr_sumar_1_argument, (caddr_t) &arg,
+	arg.a = a;
+	arg.b = b;
+	if (clnt_call (clnt, SUMAR, (xdrproc_t) xdr_sumar_1_argument, (caddr_t) &arg,
 		(xdrproc_t) xdr_double, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -27,15 +27,15 @@ sumar_1(int arg1, int arg2,  CLIENT *clnt)
 }
 
 double *
-restar_1(int arg1, int arg2,  CLIENT *clnt)
+restar_1(int a, int b,  CLIENT *clnt)
 {
 	restar_1_argument arg;
 	static double clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	arg.arg1 = arg1;
-	arg.arg2 = arg2;
-	if (clnt_call (clnt, restar, (xdrproc_t) xdr_restar_1_argument, (caddr_t) &arg,
+	arg.a = a;
+	arg.b = b;
+	if (clnt_call (clnt, RESTAR, (xdrproc_t) xdr_restar_1_argument, (caddr_t) &arg,
 		(xdrproc_t) xdr_double, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -44,15 +44,15 @@ restar_1(int arg1, int arg2,  CLIENT *clnt)
 }
 
 double *
-multiplicacion_1(int arg1, int arg2,  CLIENT *clnt)
+multiplicar_1(int a, int b,  CLIENT *clnt)
 {
-	multiplicacion_1_argument arg;
+	multiplicar_1_argument arg;
 	static double clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	arg.arg1 = arg1;
-	arg.arg2 = arg2;
-	if (clnt_call (clnt, multiplicacion, (xdrproc_t) xdr_multiplicacion_1_argument, (caddr_t) &arg,
+	arg.a = a;
+	arg.b = b;
+	if (clnt_call (clnt, MULTIPLICAR, (xdrproc_t) xdr_multiplicar_1_argument, (caddr_t) &arg,
 		(xdrproc_t) xdr_double, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
@@ -61,15 +61,15 @@ multiplicacion_1(int arg1, int arg2,  CLIENT *clnt)
 }
 
 double *
-dividir_1(int arg1, int arg2,  CLIENT *clnt)
+dividir_1(int a, int b,  CLIENT *clnt)
 {
 	dividir_1_argument arg;
 	static double clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	arg.arg1 = arg1;
-	arg.arg2 = arg2;
-	if (clnt_call (clnt, dividir, (xdrproc_t) xdr_dividir_1_argument, (caddr_t) &arg,
+	arg.a = a;
+	arg.b = b;
+	if (clnt_call (clnt, DIVIDIR, (xdrproc_t) xdr_dividir_1_argument, (caddr_t) &arg,
 		(xdrproc_t) xdr_double, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
