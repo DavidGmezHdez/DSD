@@ -8,12 +8,12 @@
 
 
 void
-calculadora_1(char *host, int ent1, char op, int ent2)
+calculadora_1(char *host, int *ent, int tamanioEnteros, char *op, int tamanioOperaciones)
 {
 	CLIENT *clnt;
-	double  *result;
-	int entero1 = ent1, entero2 = ent2;
-	char operacion = op;
+	double  *result, *resultadoTotal;
+	char operacion;
+	int entero1, entero2;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, CALCULADORA, CALCVER, "udp");
@@ -23,53 +23,80 @@ calculadora_1(char *host, int ent1, char op, int ent2)
 	}
 #endif	/* DEBUG */
 
-	printf("\nRealizando la operacion %i %c %i \n",entero1,operacion,entero2);
+	for(int i=0,j=1;i<tamanioOperaciones;i++, j++){
+		operacion = op[i];
+		entero2 = ent[j];
+		if(result==NULL)
+			entero1 = ent[0];
+		else
+			entero1 = (double) *result;
+		
+		printf("\nRealizando la operacion %i %c %i \n",entero1,operacion,entero2);
 
-	switch(operacion){
-		case '+':
-			result = sumar_1(entero1,entero2,clnt);
-			printf("\nEl resultado de la suma ha sido: %f",*result);
-			break;
-		case '-':
-			result = restar_1(entero1,entero2,clnt);
-			printf("\nEl resultado de la resta ha sido: %f",*result);
-			break;
-		case '*':
-			result = multiplicar_1(entero1,entero2,clnt);
-			printf("\nEl resultado de la multiplicacion ha sido: %f",*result);
-			break;
-		case 'x':
-			result = multiplicar_1(entero1,entero2,clnt);
-			printf("\nEl resultado de la multiplicacion ha sido: %f",*result);
-			break;
-		case '/':
-			result = dividir_1(entero1,entero2,clnt);
-			printf("\nEl resultado de la division ha sido: %f",*result);
-			break;
+		switch(operacion){
+			case '+':
+				result = sumar_1(entero1,entero2,clnt);
+				printf("\nEl resultado de la suma ha sido: %f",*result);
+				break;
+			case '-':
+				result = restar_1(entero1,entero2,clnt);
+				printf("\nEl resultado de la resta ha sido: %f",*result);
+				break;
+			case '*':
+				result = multiplicar_1(entero1,entero2,clnt);
+				printf("\nEl resultado de la multiplicacion ha sido: %f",*result);
+				break;
+			case 'x':
+				result = multiplicar_1(entero1,entero2,clnt);
+				printf("\nEl resultado de la multiplicacion ha sido: %f",*result);
+				break;
+			case '/':
+				result = dividir_1(entero1,entero2,clnt);
+				printf("\nEl resultado de la division ha sido: %f",*result);
+				break;
+		}
+
+		if(result == NULL){
+			clnt_perror(clnt,"RESULTADO INVALIDO");
+		}
+
 	}
-
-	if(result == NULL){
-		clnt_perror(clnt,"RESULTADO INVALIDO");
-	}
-
 
 #ifndef	DEBUG
 	clnt_destroy (clnt);
 #endif	 /* DEBUG */
 }
 
+
 int
 main (int argc, char *argv[])
 {
 	if(argc < 5){
-		printf("Error: Falta de datos desde la erminal, la cadena de datos de entrada tiene que ser -> <host> <entero> <operacion> <entero> \n");
+		printf("Error: Falta de datos desde la erminal, la cadena de datos de entrada tiene que ser -> <host> <entero> <operacion> <entero> <operacion> <entero>... SIEMPRE DESPUES DE UNA OPERACION UN ENTERO \n");
 		exit(1);
 	}
-	
-	char *host = argv[1];
-	int entero1 = atoi(argv[2]), entero2 = atoi(argv[4]);
-	char operacion = (char)argv[3][0];
 
-	calculadora_1(host,entero1,operacion,entero2);
+
+	char *host = argv[1];
+	int tamanioEnt = argc/2;
+	int tamanioOp = (argc/2) - 1;
+	printf("%i",tamanioEnt);
+	printf("%i",tamanioOp);
+
+	printf("%i",atoi(argv[2]));
+	int enteros[tamanioEnt];
+	char operadores[tamanioOp];
+
+	for(int i=0,j=2,k=3;i<tamanioEnt;i++,j+=2,k+=2){
+		enteros[i] = atoi(argv[j]);
+		
+	}
+
+	for(int i=0,k=3;i<tamanioOp;i++,k+=2){
+		operadores[i] = (char)argv[k][0];
+	}
+
+
+	calculadora_1(host,enteros,tamanioEnt,operadores,tamanioOp);
 	exit(0);
 }
