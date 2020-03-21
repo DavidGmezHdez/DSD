@@ -40,6 +40,24 @@ _dividir_1 (dividir_1_argument *argp, struct svc_req *rqstp)
 	return (dividir_1_svc(argp->a, argp->b, rqstp));
 }
 
+static t_vector *
+_sumavectores_1 (sumavectores_1_argument *argp, struct svc_req *rqstp)
+{
+	return (sumavectores_1_svc(argp->vec1, argp->vec2, rqstp));
+}
+
+static t_vector *
+_restavectores_1 (restavectores_1_argument *argp, struct svc_req *rqstp)
+{
+	return (restavectores_1_svc(argp->vec1, argp->vec2, rqstp));
+}
+
+static t_vector *
+_productovectores_1 (productovectores_1_argument *argp, struct svc_req *rqstp)
+{
+	return (productovectores_1_svc(argp->vec1, argp->vec2, rqstp));
+}
+
 static void
 calculadora_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
@@ -48,6 +66,9 @@ calculadora_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		restar_1_argument restar_1_arg;
 		multiplicar_1_argument multiplicar_1_arg;
 		dividir_1_argument dividir_1_arg;
+		sumavectores_1_argument sumavectores_1_arg;
+		restavectores_1_argument restavectores_1_arg;
+		productovectores_1_argument productovectores_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -80,6 +101,24 @@ calculadora_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		_xdr_argument = (xdrproc_t) xdr_dividir_1_argument;
 		_xdr_result = (xdrproc_t) xdr_double;
 		local = (char *(*)(char *, struct svc_req *)) _dividir_1;
+		break;
+
+	case SUMAVECTORES:
+		_xdr_argument = (xdrproc_t) xdr_sumavectores_1_argument;
+		_xdr_result = (xdrproc_t) xdr_t_vector;
+		local = (char *(*)(char *, struct svc_req *)) _sumavectores_1;
+		break;
+
+	case RESTAVECTORES:
+		_xdr_argument = (xdrproc_t) xdr_restavectores_1_argument;
+		_xdr_result = (xdrproc_t) xdr_t_vector;
+		local = (char *(*)(char *, struct svc_req *)) _restavectores_1;
+		break;
+
+	case PRODUCTOVECTORES:
+		_xdr_argument = (xdrproc_t) xdr_productovectores_1_argument;
+		_xdr_result = (xdrproc_t) xdr_t_vector;
+		local = (char *(*)(char *, struct svc_req *)) _productovectores_1;
 		break;
 
 	default:

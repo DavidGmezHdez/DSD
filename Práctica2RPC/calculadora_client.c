@@ -6,6 +6,57 @@
 
 #include "calculadora.h"
 
+void
+calculadora_2(char *host, t_vector v1, char op, t_vector v2){
+	CLIENT *clnt;
+	t_vector vec1 = v1, vec2 = v2, *result;
+	char operacion = op;
+
+	#ifndef	DEBUG
+		clnt = clnt_create (host, CALCULADORA, CALCVER, "udp");
+		if (clnt == NULL) {
+			clnt_pcreateerror (host);
+			exit (1);
+		}
+	#endif	/* DEBUG */
+
+
+	printf("\nRealizando la operacion %c entre el vector 1 y el vector 2 \n",operacion);
+
+		switch(operacion){
+			case '+':
+				result = sumavectores_1(vec1,vec2,clnt);
+				printf("\nEl resultado de la suma ha sido: \n");
+				for(int i = 0;i < result->t_vector_len;i++){
+					printf("%f\n",result->t_vector_val[i]);
+				}
+				break;
+			case '-':
+				result = restavectores_1(vec1,vec2,clnt);
+				printf("\nEl resultado de la resta ha sido: \n");
+				for(int i = 0;i < result->t_vector_len;i++){
+					printf("%f\n",result->t_vector_val[i]);
+				}
+				break;
+			case 'x':
+				result = productovectores_1(vec1,vec2,clnt);
+				printf("\nEl resultado del producto ha sido: \n");
+				for(int i = 0;i < result->t_vector_len;i++){
+					printf("%f\n",result->t_vector_val[i]);
+				}
+				break;
+		}
+
+		if(result == NULL){
+			clnt_perror(clnt,"RESULTADO INVALIDO");
+		}
+
+
+
+	#ifndef	DEBUG
+		clnt_destroy (clnt);
+	#endif	 /* DEBUG */
+}
 
 void
 calculadora_1(char *host, int *ent, int tamanioEnteros, char *op, int tamanioOperaciones)
@@ -71,32 +122,75 @@ calculadora_1(char *host, int *ent, int tamanioEnteros, char *op, int tamanioOpe
 int
 main (int argc, char *argv[])
 {
-	if(argc < 5){
+	if(argc < 4){
 		printf("Error: Falta de datos desde la erminal, la cadena de datos de entrada tiene que ser -> <host> <entero> <operacion> <entero> <operacion> <entero>... SIEMPRE DESPUES DE UNA OPERACION UN ENTERO \n");
 		exit(1);
 	}
 
 
 	char *host = argv[1];
-	int tamanioEnt = argc/2;
-	int tamanioOp = (argc/2) - 1;
-	printf("%i",tamanioEnt);
-	printf("%i",tamanioOp);
+	char* tipo = argv[2];	
+	if(strcmp(tipo,"enteros") == 0){
+		printf("operando con enteros");
+		
+		int tamanioEnt = (argc/2) -1;
+		int tamanioOp = (argc/2) - 2;
+		/*printf("%i",tamanioEnt);
+		printf("%i",tamanioOp);*/
 
-	printf("%i",atoi(argv[2]));
-	int enteros[tamanioEnt];
-	char operadores[tamanioOp];
+		int enteros[tamanioEnt];
+		char operadores[tamanioOp];
 
-	for(int i=0,j=2,k=3;i<tamanioEnt;i++,j+=2,k+=2){
-		enteros[i] = atoi(argv[j]);
+		for(int i=0,j=3;i<tamanioEnt;i++,j+=2){
+			enteros[i] = atoi(argv[j]);
+			
+		}
+		
+		if(tamanioOp == 1){
+			operadores[0] = (char)argv[4][0];
+		}
+		else{
+			for(int i=0,k=4;i<tamanioOp;i++,k+=2){
+				operadores[i] = (char)argv[k][0];
+			}
+		}
+
+
+		calculadora_1(host,enteros,tamanioEnt,operadores,tamanioOp);
+
+	}
+
+	else if(strcmp(tipo,"vectores") == 0){
+		char operacion = (char)argv[3][0];
+		int tamanio;
+		t_vector v1;
+		t_vector v2;
+
+		printf("Introduce el tamanio de los vectores \n");
+		scanf("%d",&tamanio);
+		
+		v1.t_vector_len = tamanio;
+		v2.t_vector_len = tamanio;
+		
+		v1.t_vector_val = (float*)malloc(tamanio*sizeof(float));
+		v2.t_vector_val = (float*)malloc(tamanio*sizeof(float));
+
+		for(int i = 0;i < tamanio;i++){
+			printf("Introduce la componente %d del primer vector: \n",i);
+			scanf("%f",&v1.t_vector_val[i]);
+		}
+		printf("PRIMER VECTOR LLENO\n");
+
+		for(int j = 0;j < tamanio;j++){
+			printf("Introduce la componente %d del segundo vector: \n",j);
+			scanf("%f",&v2.t_vector_val[j]);
+		}
+		printf("SEGUNDO VECTOR LLENO\n");
+
+		calculadora_2(host,v1,operacion,v2);
 		
 	}
 
-	for(int i=0,k=3;i<tamanioOp;i++,k+=2){
-		operadores[i] = (char)argv[k][0];
-	}
 
-
-	calculadora_1(host,enteros,tamanioEnt,operadores,tamanioOp);
 	exit(0);
 }

@@ -14,6 +14,11 @@ extern "C" {
 #endif
 
 
+typedef struct {
+	u_int t_vector_len;
+	float *t_vector_val;
+} t_vector;
+
 struct sumar_1_argument {
 	int a;
 	int b;
@@ -38,6 +43,24 @@ struct dividir_1_argument {
 };
 typedef struct dividir_1_argument dividir_1_argument;
 
+struct sumavectores_1_argument {
+	t_vector vec1;
+	t_vector vec2;
+};
+typedef struct sumavectores_1_argument sumavectores_1_argument;
+
+struct restavectores_1_argument {
+	t_vector vec1;
+	t_vector vec2;
+};
+typedef struct restavectores_1_argument restavectores_1_argument;
+
+struct productovectores_1_argument {
+	t_vector vec1;
+	t_vector vec2;
+};
+typedef struct productovectores_1_argument productovectores_1_argument;
+
 #define CALCULADORA 0x20000001
 #define CALCVER 1
 
@@ -54,6 +77,15 @@ extern  double * multiplicar_1_svc(int , int , struct svc_req *);
 #define DIVIDIR 4
 extern  double * dividir_1(int , int , CLIENT *);
 extern  double * dividir_1_svc(int , int , struct svc_req *);
+#define SUMAVECTORES 5
+extern  t_vector * sumavectores_1(t_vector , t_vector , CLIENT *);
+extern  t_vector * sumavectores_1_svc(t_vector , t_vector , struct svc_req *);
+#define RESTAVECTORES 6
+extern  t_vector * restavectores_1(t_vector , t_vector , CLIENT *);
+extern  t_vector * restavectores_1_svc(t_vector , t_vector , struct svc_req *);
+#define PRODUCTOVECTORES 7
+extern  t_vector * productovectores_1(t_vector , t_vector , CLIENT *);
+extern  t_vector * productovectores_1_svc(t_vector , t_vector , struct svc_req *);
 extern int calculadora_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
@@ -69,22 +101,39 @@ extern  double * multiplicar_1_svc();
 #define DIVIDIR 4
 extern  double * dividir_1();
 extern  double * dividir_1_svc();
+#define SUMAVECTORES 5
+extern  t_vector * sumavectores_1();
+extern  t_vector * sumavectores_1_svc();
+#define RESTAVECTORES 6
+extern  t_vector * restavectores_1();
+extern  t_vector * restavectores_1_svc();
+#define PRODUCTOVECTORES 7
+extern  t_vector * productovectores_1();
+extern  t_vector * productovectores_1_svc();
 extern int calculadora_1_freeresult ();
 #endif /* K&R C */
 
 /* the xdr functions */
 
 #if defined(__STDC__) || defined(__cplusplus)
+extern  bool_t xdr_t_vector (XDR *, t_vector*);
 extern  bool_t xdr_sumar_1_argument (XDR *, sumar_1_argument*);
 extern  bool_t xdr_restar_1_argument (XDR *, restar_1_argument*);
 extern  bool_t xdr_multiplicar_1_argument (XDR *, multiplicar_1_argument*);
 extern  bool_t xdr_dividir_1_argument (XDR *, dividir_1_argument*);
+extern  bool_t xdr_sumavectores_1_argument (XDR *, sumavectores_1_argument*);
+extern  bool_t xdr_restavectores_1_argument (XDR *, restavectores_1_argument*);
+extern  bool_t xdr_productovectores_1_argument (XDR *, productovectores_1_argument*);
 
 #else /* K&R C */
+extern bool_t xdr_t_vector ();
 extern bool_t xdr_sumar_1_argument ();
 extern bool_t xdr_restar_1_argument ();
 extern bool_t xdr_multiplicar_1_argument ();
 extern bool_t xdr_dividir_1_argument ();
+extern bool_t xdr_sumavectores_1_argument ();
+extern bool_t xdr_restavectores_1_argument ();
+extern bool_t xdr_productovectores_1_argument ();
 
 #endif /* K&R C */
 

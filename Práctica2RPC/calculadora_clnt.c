@@ -76,3 +76,54 @@ dividir_1(int a, int b,  CLIENT *clnt)
 	}
 	return (&clnt_res);
 }
+
+t_vector *
+sumavectores_1(t_vector vec1, t_vector vec2,  CLIENT *clnt)
+{
+	sumavectores_1_argument arg;
+	static t_vector clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	arg.vec1 = vec1;
+	arg.vec2 = vec2;
+	if (clnt_call (clnt, SUMAVECTORES, (xdrproc_t) xdr_sumavectores_1_argument, (caddr_t) &arg,
+		(xdrproc_t) xdr_t_vector, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+t_vector *
+restavectores_1(t_vector vec1, t_vector vec2,  CLIENT *clnt)
+{
+	restavectores_1_argument arg;
+	static t_vector clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	arg.vec1 = vec1;
+	arg.vec2 = vec2;
+	if (clnt_call (clnt, RESTAVECTORES, (xdrproc_t) xdr_restavectores_1_argument, (caddr_t) &arg,
+		(xdrproc_t) xdr_t_vector, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+t_vector *
+productovectores_1(t_vector vec1, t_vector vec2,  CLIENT *clnt)
+{
+	productovectores_1_argument arg;
+	static t_vector clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	arg.vec1 = vec1;
+	arg.vec2 = vec2;
+	if (clnt_call (clnt, PRODUCTOVECTORES, (xdrproc_t) xdr_productovectores_1_argument, (caddr_t) &arg,
+		(xdrproc_t) xdr_t_vector, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
