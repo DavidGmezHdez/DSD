@@ -123,7 +123,7 @@ int
 main (int argc, char *argv[])
 {
 	if(argc < 4){
-		printf("Error: Falta de datos desde la erminal, la cadena de datos de entrada tiene que ser -> <host> <entero> <operacion> <entero> <operacion> <entero>... SIEMPRE DESPUES DE UNA OPERACION UN ENTERO \n");
+		printf("Error: Falta de datos desde la erminal, la cadena de datos de entrada tiene que ser -> <host> <entero> <tipo> , distinguiendo tipo en enteros y vectores \n Si el tipo es enteros, la cadena sigue con <entero> <operacion> <entero>... Si el tipo es vectores, la cadena sigue con <operacion> \n");
 		exit(1);
 	}
 
@@ -135,8 +135,6 @@ main (int argc, char *argv[])
 		
 		int tamanioEnt = (argc/2) -1;
 		int tamanioOp = (argc/2) - 2;
-		/*printf("%i",tamanioEnt);
-		printf("%i",tamanioOp);*/
 
 		int enteros[tamanioEnt];
 		char operadores[tamanioOp];
