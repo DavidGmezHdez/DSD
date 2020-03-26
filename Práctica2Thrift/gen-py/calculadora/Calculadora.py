@@ -77,6 +77,30 @@ class Iface:
     """
     pass
 
+  def productoVectorial(self, v1, v2):
+    """
+    Parameters:
+     - v1
+     - v2
+    """
+    pass
+
+  def productoEscalar(self, v1, v2):
+    """
+    Parameters:
+     - v1
+     - v2
+    """
+    pass
+
+  def productoMatrices(self, m1, m2):
+    """
+    Parameters:
+     - m1
+     - m2
+    """
+    pass
+
 
 class Client(Iface):
   def __init__(self, iprot, oprot=None):
@@ -332,6 +356,102 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "multiplicarVectores failed: unknown result");
 
+  def productoVectorial(self, v1, v2):
+    """
+    Parameters:
+     - v1
+     - v2
+    """
+    self.send_productoVectorial(v1, v2)
+    return self.recv_productoVectorial()
+
+  def send_productoVectorial(self, v1, v2):
+    self._oprot.writeMessageBegin('productoVectorial', TMessageType.CALL, self._seqid)
+    args = productoVectorial_args()
+    args.v1 = v1
+    args.v2 = v2
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_productoVectorial(self):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = productoVectorial_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "productoVectorial failed: unknown result");
+
+  def productoEscalar(self, v1, v2):
+    """
+    Parameters:
+     - v1
+     - v2
+    """
+    self.send_productoEscalar(v1, v2)
+    return self.recv_productoEscalar()
+
+  def send_productoEscalar(self, v1, v2):
+    self._oprot.writeMessageBegin('productoEscalar', TMessageType.CALL, self._seqid)
+    args = productoEscalar_args()
+    args.v1 = v1
+    args.v2 = v2
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_productoEscalar(self):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = productoEscalar_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "productoEscalar failed: unknown result");
+
+  def productoMatrices(self, m1, m2):
+    """
+    Parameters:
+     - m1
+     - m2
+    """
+    self.send_productoMatrices(m1, m2)
+    return self.recv_productoMatrices()
+
+  def send_productoMatrices(self, m1, m2):
+    self._oprot.writeMessageBegin('productoMatrices', TMessageType.CALL, self._seqid)
+    args = productoMatrices_args()
+    args.m1 = m1
+    args.m2 = m2
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_productoMatrices(self):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = productoMatrices_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "productoMatrices failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   def __init__(self, handler):
@@ -345,6 +465,9 @@ class Processor(Iface, TProcessor):
     self._processMap["sumarVectores"] = Processor.process_sumarVectores
     self._processMap["restarVectores"] = Processor.process_restarVectores
     self._processMap["multiplicarVectores"] = Processor.process_multiplicarVectores
+    self._processMap["productoVectorial"] = Processor.process_productoVectorial
+    self._processMap["productoEscalar"] = Processor.process_productoEscalar
+    self._processMap["productoMatrices"] = Processor.process_productoMatrices
 
   def process(self, iprot, oprot):
     (name, type, seqid) = iprot.readMessageBegin()
@@ -445,6 +568,39 @@ class Processor(Iface, TProcessor):
     result = multiplicarVectores_result()
     result.success = self._handler.multiplicarVectores(args.v1, args.v2)
     oprot.writeMessageBegin("multiplicarVectores", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_productoVectorial(self, seqid, iprot, oprot):
+    args = productoVectorial_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = productoVectorial_result()
+    result.success = self._handler.productoVectorial(args.v1, args.v2)
+    oprot.writeMessageBegin("productoVectorial", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_productoEscalar(self, seqid, iprot, oprot):
+    args = productoEscalar_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = productoEscalar_result()
+    result.success = self._handler.productoEscalar(args.v1, args.v2)
+    oprot.writeMessageBegin("productoEscalar", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_productoMatrices(self, seqid, iprot, oprot):
+    args = productoMatrices_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = productoMatrices_result()
+    result.success = self._handler.productoMatrices(args.m1, args.m2)
+    oprot.writeMessageBegin("productoMatrices", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1505,6 +1661,487 @@ class multiplicarVectores_result:
       oprot.writeListBegin(TType.I32, len(self.success))
       for iter62 in self.success:
         oprot.writeI32(iter62)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class productoVectorial_args:
+  """
+  Attributes:
+   - v1
+   - v2
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'v1', (TType.I32,None), None, ), # 1
+    (2, TType.LIST, 'v2', (TType.I32,None), None, ), # 2
+  )
+
+  def __init__(self, v1=None, v2=None,):
+    self.v1 = v1
+    self.v2 = v2
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.v1 = []
+          (_etype66, _size63) = iprot.readListBegin()
+          for _i67 in xrange(_size63):
+            _elem68 = iprot.readI32();
+            self.v1.append(_elem68)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.v2 = []
+          (_etype72, _size69) = iprot.readListBegin()
+          for _i73 in xrange(_size69):
+            _elem74 = iprot.readI32();
+            self.v2.append(_elem74)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('productoVectorial_args')
+    if self.v1 is not None:
+      oprot.writeFieldBegin('v1', TType.LIST, 1)
+      oprot.writeListBegin(TType.I32, len(self.v1))
+      for iter75 in self.v1:
+        oprot.writeI32(iter75)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.v2 is not None:
+      oprot.writeFieldBegin('v2', TType.LIST, 2)
+      oprot.writeListBegin(TType.I32, len(self.v2))
+      for iter76 in self.v2:
+        oprot.writeI32(iter76)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class productoVectorial_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.I32,None), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype80, _size77) = iprot.readListBegin()
+          for _i81 in xrange(_size77):
+            _elem82 = iprot.readI32();
+            self.success.append(_elem82)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('productoVectorial_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.I32, len(self.success))
+      for iter83 in self.success:
+        oprot.writeI32(iter83)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class productoEscalar_args:
+  """
+  Attributes:
+   - v1
+   - v2
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'v1', (TType.I32,None), None, ), # 1
+    (2, TType.LIST, 'v2', (TType.I32,None), None, ), # 2
+  )
+
+  def __init__(self, v1=None, v2=None,):
+    self.v1 = v1
+    self.v2 = v2
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.v1 = []
+          (_etype87, _size84) = iprot.readListBegin()
+          for _i88 in xrange(_size84):
+            _elem89 = iprot.readI32();
+            self.v1.append(_elem89)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.v2 = []
+          (_etype93, _size90) = iprot.readListBegin()
+          for _i94 in xrange(_size90):
+            _elem95 = iprot.readI32();
+            self.v2.append(_elem95)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('productoEscalar_args')
+    if self.v1 is not None:
+      oprot.writeFieldBegin('v1', TType.LIST, 1)
+      oprot.writeListBegin(TType.I32, len(self.v1))
+      for iter96 in self.v1:
+        oprot.writeI32(iter96)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.v2 is not None:
+      oprot.writeFieldBegin('v2', TType.LIST, 2)
+      oprot.writeListBegin(TType.I32, len(self.v2))
+      for iter97 in self.v2:
+        oprot.writeI32(iter97)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class productoEscalar_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.DOUBLE, 'success', None, None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.DOUBLE:
+          self.success = iprot.readDouble();
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('productoEscalar_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.DOUBLE, 0)
+      oprot.writeDouble(self.success)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class productoMatrices_args:
+  """
+  Attributes:
+   - m1
+   - m2
+  """
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'm1', (TType.LIST,(TType.I32,None)), None, ), # 1
+    (2, TType.LIST, 'm2', (TType.LIST,(TType.I32,None)), None, ), # 2
+  )
+
+  def __init__(self, m1=None, m2=None,):
+    self.m1 = m1
+    self.m2 = m2
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.m1 = []
+          (_etype101, _size98) = iprot.readListBegin()
+          for _i102 in xrange(_size98):
+            _elem103 = []
+            (_etype107, _size104) = iprot.readListBegin()
+            for _i108 in xrange(_size104):
+              _elem109 = iprot.readI32();
+              _elem103.append(_elem109)
+            iprot.readListEnd()
+            self.m1.append(_elem103)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.m2 = []
+          (_etype113, _size110) = iprot.readListBegin()
+          for _i114 in xrange(_size110):
+            _elem115 = []
+            (_etype119, _size116) = iprot.readListBegin()
+            for _i120 in xrange(_size116):
+              _elem121 = iprot.readI32();
+              _elem115.append(_elem121)
+            iprot.readListEnd()
+            self.m2.append(_elem115)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('productoMatrices_args')
+    if self.m1 is not None:
+      oprot.writeFieldBegin('m1', TType.LIST, 1)
+      oprot.writeListBegin(TType.LIST, len(self.m1))
+      for iter122 in self.m1:
+        oprot.writeListBegin(TType.I32, len(iter122))
+        for iter123 in iter122:
+          oprot.writeI32(iter123)
+        oprot.writeListEnd()
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.m2 is not None:
+      oprot.writeFieldBegin('m2', TType.LIST, 2)
+      oprot.writeListBegin(TType.LIST, len(self.m2))
+      for iter124 in self.m2:
+        oprot.writeListBegin(TType.I32, len(iter124))
+        for iter125 in iter124:
+          oprot.writeI32(iter125)
+        oprot.writeListEnd()
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, value)
+      for key, value in self.__dict__.iteritems()]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class productoMatrices_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.LIST,(TType.I32,None)), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype129, _size126) = iprot.readListBegin()
+          for _i130 in xrange(_size126):
+            _elem131 = []
+            (_etype135, _size132) = iprot.readListBegin()
+            for _i136 in xrange(_size132):
+              _elem137 = iprot.readI32();
+              _elem131.append(_elem137)
+            iprot.readListEnd()
+            self.success.append(_elem131)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('productoMatrices_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.LIST, len(self.success))
+      for iter138 in self.success:
+        oprot.writeListBegin(TType.I32, len(iter138))
+        for iter139 in iter138:
+          oprot.writeI32(iter139)
+        oprot.writeListEnd()
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
