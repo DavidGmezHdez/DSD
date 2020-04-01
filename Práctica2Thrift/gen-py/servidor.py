@@ -59,6 +59,38 @@ class CalculadoraHandler :
             resultado.append(v1[i] * v2[i])
         return resultado
 
+    def productoVectorial(self, v1, v2):
+        print ("Realizando el producto vectorial de v1 con v2")
+        resultado = [v1[1]*v2[2] - v1[2]*v2[1], v1[2]*v2[0] - v1[0]*v2[2], v1[0]*v2[1] - v1[1]*v2[0]]
+        return resultado
+    
+    def productoEscalar(self,v1,v2):
+        print ("Realizando el producto escalar de v1 con v2")
+        resultado = 0
+        for i in range(0,len(v1)):
+            resultado = resultado + v1[i] * v2[i]
+        return resultado
+    
+    def productoMatrices(self,m1,m2):
+        print ("Realizando el producto matricial de m1 con m2")
+        filasM1 = len(m1)
+        colsM1 = len(m1[0])
+        filasM2 = len(m2)
+        colsM2 = len(m2[0])
+
+        if colsM1 != filasM2:
+            print("No se pueden multiplicar las matrices, las dimensiones no son validas")
+            return
+        
+        resultado = [[0 for fila in range(colsM2)] for col in range (filasM1)]
+
+        for i in range (filasM1):
+            for j in range (colsM2):
+                for k in range (colsM1):
+                    resultado[i][j] += m1[i][k] * m2[k][j]
+        
+        return resultado
+
 
 if __name__ == '__main__':
     handler = CalculadoraHandler ()

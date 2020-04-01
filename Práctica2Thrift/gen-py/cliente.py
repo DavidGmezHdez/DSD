@@ -16,11 +16,11 @@ client.ping ()
 
 print("Hacemos la suma 1+1")
 resultado = client.sumar (1 , 1)
-print (" 1+1= "+ str( resultado ))
+print ("1+1= "+ str( resultado ))
 
-print("Hacemos la resta 1+1")
+print("Hacemos la resta 1-1")
 resultado = client.restar (1 , 1)
-print ("1 -1="+ str( resultado ))
+print ("1-1="+ str( resultado ))
 
 print("Hacemos la multiplicacion 5x2")
 resultado = client.multiplicar(5, 2)
@@ -55,5 +55,40 @@ resultado = [0,0,0,0,0]
 resultado = client.multiplicarVectores(v1,v2)
 print(resultado)
 
+
+v1 = [1,2,3]
+v2 = [5,4,3]
+
+print("Mostramos los vectores nuevos")
+print("v1")
+print(v1)
+
+print("v2")
+print(v2)
+
+
+print("Realizamos el producto vectorial de v1 y v2")
+resultado = [0,0,0]
+resultado = client.productoVectorial(v1,v2)
+print resultado
+
+print("Realizamos el producto escalar de v1 y v2")
+resultado = client.productoEscalar(v1,v2)
+print resultado
+
+
+m1 = [[1,2,3],[4,5,6],[7,8,9],[10,11,12]]
+m2 = [[1,2],[3,4],[5,6]]
+
+
+print("Mostramos las matrices")
+print("m1")
+print(m1)
+
+print("m2")
+print(m2)
+print("Realizamos el producto matricial de m1 y m2")
+resultado = client.productoMatrices(m1,m2)
+print resultado
 
 transport . close ()
