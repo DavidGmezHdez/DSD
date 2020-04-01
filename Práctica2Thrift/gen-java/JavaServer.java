@@ -6,6 +6,7 @@ import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
+import org.apache.thrift.TException;
 import Calculadora.*;
 
 class CalculadoraHandler implements Calculadora.Iface {
@@ -90,13 +91,16 @@ class CalculadoraHandler implements Calculadora.Iface {
         return resultado;
     }
 
+    // Lanzar el servidor en el static void main ()
+
+    public static void main(){
+        try {
+            TServerTransport serverTransport = new TServerSocket (9090);
+            TServer server = new TSimpleServer ( new Args ( serverTransport ).
+            processor ( processor ));
+            System .out.println (" Iniciando servidor ... ");
+            server.serve();
+        } catch ( Exception e) { e. printStackTrace (); }
+    }
 
 }
-// Lanzar el servidor en el static void main ()
-try {
-    TServerTransport serverTransport = new TServerSocket (9090);
-    TServer server = new TSimpleServer ( new Args ( serverTransport ).
-    processor ( processor ));
-    System .out.println (" Iniciando servidor ... ");
-    server.serve();
-} catch ( Exception e) { e. printStackTrace (); }
