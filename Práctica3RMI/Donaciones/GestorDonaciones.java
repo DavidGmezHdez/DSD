@@ -2,6 +2,8 @@
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.net.MalformedURLException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 
 public class GestorDonaciones extends UnicastRemoteObject implements IGestorDonaciones
@@ -11,7 +13,7 @@ public class GestorDonaciones extends UnicastRemoteObject implements IGestorDona
     private String nombreReplica;
     private int punteroEntidad;
 
-    GestorDonaciones(String replica){
+    public GestorDonaciones(String replica) throws RemoteException{
         this.nombreReplica = replica;
         this.subtotal = 0;
         this.entidades = new ArrayList<>();
@@ -19,7 +21,7 @@ public class GestorDonaciones extends UnicastRemoteObject implements IGestorDona
     }
 
     @Override
-    public boolean registrarse(String usuario, String contraseña) throws RemoteException{
+    public boolean registrarse(String usuario, String password) throws RemoteException{
         //Cogemos la replica del servidor para comprobar que el cliente no esté ahí
         IGestorDonaciones rep = this.getRep();
         
@@ -40,37 +42,40 @@ public class GestorDonaciones extends UnicastRemoteObject implements IGestorDona
 
         //Añadimos la entidad a la réplica que tenga menos entidades
         if(this.getEntidades().size() < rep.getEntidades().size())
-            this.aniadirEntidad(new Entidad(usuario,contraseña));
+            this.aniadirEntidad(new Entidad(usuario,password));
         
         else
-            rep.aniadirEntidad(new Entidad(usuario,contrasela));
+            rep.aniadirEntidad(new Entidad(usuario,password));
 
         System.out.println("Entidad con nombre de usuario: " + usuario + " añadida");
+        //this.mostrarEntidades();
         return true;
     }
     
     @Override
-    public boolean iniciarSesion (String usuario, String contraseña) throws RemoteException{
+    public boolean iniciarSesion (String usuario, String password) throws RemoteException{
         //Cogemos la replica del servidor para comprobar que el cliente no esté ahí
         IGestorDonaciones rep = this.getRep();
 
-        //Comprobamos que está en el local
+        //Comprobamos si está en local
         if(this.existeEntidad(usuario)){
-            Entidad encontrada = this.obtenerEntidad();
+            Entidad entidad = this.obtenerEntidad();
 
-            if(encontrada.getContraseña().equals(contraseña))
+            if(entidad.getPassword().equals(password))
                 return true;
         }
 
-        //Comprobamos que está en la replica
+        //Comprobamos si está en la replica
         if(rep!=null){
             if(rep.existeEntidad(usuario)){
-                Entidad encontrada = this.obtenerEntidad();
+                
+                Entidad entidad = rep.obtenerEntidad();
 
-                if(encontrada.getContraseña().equals(contraseña))
+                if(entidad.getPassword().equals(password))
                     return true;
             }
         }
+        //this.mostrarEntidades();
         return false;
     } 
 
@@ -78,7 +83,7 @@ public class GestorDonaciones extends UnicastRemoteObject implements IGestorDona
 
     @Override
     public void aniadirEntidad(Entidad ent) throws RemoteException{
-        this.entidades.push(ent);
+        this.entidades.add(ent);
     }
 
     @Override
@@ -86,13 +91,11 @@ public class GestorDonaciones extends UnicastRemoteObject implements IGestorDona
         return this.entidades;
     }
     
-
-    
     @Override
     public boolean existeEntidad(String usuario) throws RemoteException{
         boolean resultado = false;
         for(int i=0;i<entidades.size() && !resultado;i++){
-            if(this.entidades.get(i).getUsuario() == usuario)
+            if(this.entidades.get(i).getUsuario().equals(usuario))
                 resultado = true;
                 punteroEntidad = i;
         }
@@ -111,7 +114,7 @@ public class GestorDonaciones extends UnicastRemoteObject implements IGestorDona
         
         try {
             Registry mireg = LocateRegistry.getRegistry("localhost", 1099);
-            rep = (IDonaciones)mireg.lookup(this.nombreReplica);
+            rep = (IGestorDonaciones)mireg.lookup(this.nombreReplica);
         } 
         catch (NotBoundException | RemoteException e) {
             e.printStackTrace();
@@ -130,24 +133,89 @@ public class GestorDonaciones extends UnicastRemoteObject implements IGestorDona
         //Cogemos la replica del servidor para comprobar que el cliente no esté ahí
         IGestorDonaciones rep = this.getRep();
 
-        //Comprobamos si está en la replica
-        if(rep!=null){
-            if(rep.existeEntidad(usuario)){
-                Entidad encontrada = this.obtenerEntidad();
-                encontrada.aumentarDonacion(cantidad);
-                rep.aumentarSubtotal(cantidad);
-                return true;
-            }
-        }
+
+
         //Comprobamos si está en local
         if(this.existeEntidad(usuario)){
-            Entidad encontrada = this.obtenerEntidad();
-            encontrada.aumentarDonacion(cantidad);
+            Entidad entidad = this.obtenerEntidad();
+            entidad.aumentarDonacion(cantidad);
+            System.out.println(entidad.getDonacion());
             this.aumentarSubtotal(cantidad);
             return true;
         }
 
+        //Comprobamos si está en la replica
+        if(rep!=null){
+            if(rep.existeEntidad(usuario)){
+                Entidad entidad = rep.obtenerEntidad();
+                entidad.aumentarDonacion(cantidad);
+                System.out.println(entidad.getDonacion());
+                rep.aumentarSubtotal(cantidad);
+                return true;
+            }
+        }
+
+
         return false;
+    }
+
+    @Override
+    public double getSubTotal() throws RemoteException{
+        return this.subtotal;
+    }
+
+    @Override
+    public double getTotal() throws RemoteException{
+        IGestorDonaciones rep = this.getRep();
+
+        if(rep!=null)
+            return this.getSubTotal() + rep.getSubTotal();
+        else
+            return this.getSubTotal();
+    }
+
+
+    public double obtenerTotalCliente(String usuario) throws RemoteException{
+        //Cogemos la replica del servidor para comprobar que el cliente no esté ahí
+        IGestorDonaciones rep = this.getRep();
+        double resultado = 0;
+
+        //Comprobamos si está en local
+        
+        if(this.existeEntidad(usuario)){
+            System.out.println("Entra en local obtenerTotalCliente");
+            Entidad entidad = this.obtenerEntidad();
+            System.out.println(entidad.getDonacion());
+            resultado = entidad.getDonacion();
+        }
+
+        //Comprobamos si está en la replica
+        if(rep!=null){
+            if(rep.existeEntidad(usuario)){
+                System.out.println("Entra en replica obtenerTotalCliente");
+                Entidad entidad = rep.obtenerEntidad();
+                System.out.println(entidad.getDonacion());
+                resultado = entidad.getDonacion();
+            }
+        }
+        return resultado;
+    }
+
+    public void mostrarEntidades() throws RemoteException{
+
+        System.out.println("Mostrando entidades en local");
+        for(int i=0;i<this.entidades.size();i++){
+            System.out.println("Entidad " + i + " Nombre: " + this.entidades.get(i).getUsuario() + " Contraseña: " + this.entidades.get(i).getPassword());
+        }
+
+        //Cogemos la replica del servidor para comprobar que el cliente no esté ahí
+        IGestorDonaciones rep = this.getRep();
+        if(rep!=null){
+            System.out.println("Mostrando entidades en réplica");
+            for(int i=0;i<rep.getEntidades().size();i++){
+                System.out.println("Entidad " + i + " Nombre: " + this.entidades.get(i).getUsuario() + " Contraseña: " + this.entidades.get(i).getPassword());
+            }
+        }
     }
 
 }

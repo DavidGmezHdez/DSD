@@ -18,11 +18,11 @@ public class Cliente{
         }
         try{
             // Crea el stub para el cliente especificando el nombre del servidor
-            IGestionDonaciones gestor1 = (IGestionDonaciones)Naming.lookup(servidor1);
-            IGestionDonaciones gestor2 = (IGestionDonaciones)Naming.lookup(servidor2);
+            IGestorDonaciones gestor1 = (IGestorDonaciones)Naming.lookup("gestordonaciones1");
+            IGestorDonaciones gestor2 = (IGestorDonaciones)Naming.lookup("gestordonaciones2");
             boolean inicioDeSesion = true;
 
-            String nombreUsuario,contraseña;
+            String nombreUsuario = "",password = "";
 
             while(inicioDeSesion){
                 System.out.println("Bienvenido al gestor de donaciones de DSD.SA. Seleccione una acción");
@@ -34,47 +34,67 @@ public class Cliente{
 
                 switch(opcion){
                     case 1:
+                        nombreUsuario = "";
+                        password = "";
                         System.out.println("Ha solicitado usted registrarse");
-                        System.out.println("Introduzca el nombre de usuario de la entidad");
-                        nombreUsuario = scan.nextLine();
 
-                        System.out.println("Introduzca una contraseña");
-                        contraseña = scan.nextLine();
+                        while(nombreUsuario.equals("")){
+                            System.out.println("Introduzca el nombre de usuario de la entidad");
+                            nombreUsuario = scan.nextLine();
+                            
+                        }
+                        
+                        while(password.equals("")){
+                            System.out.println("Introduzca una password");
+                            password = scan.nextLine();
+                        }
+
 
                         System.out.println("Elija en que servidor desea registarse (1 o 2)");
                         servidor = scan.nextInt();
 
-                        while(servidor!=1 || servidor!=2){
-                            System.out.println("¿Valor incorrecto (solo 1 o 2)");
-                            servidor = scan.nextInt();
-                        }
-
                         switch(servidor){
                             case 1:
-                                if(gestor1.registrarse(nombreUsuario,contraseña)
+                                if(gestor1.registrarse(nombreUsuario,password))
                                     System.out.println("Entidad registrada en el servidor 1");
                                 else
                                     System.out.println("Esta entidad ya está registrada en el otro servidor");
                                 break;
                             case 2:
-                                if(gestor2.registrarse(nombreUsuario,contraseña)
+                                if(gestor2.registrarse(nombreUsuario,password))
                                     System.out.println("Entidad registrada en el servidor 2");
                                 else
                                     System.out.println("Esta entidad ya está registrada en el otro servidor");
+                                break;
+                            default:
+                                System.out.println("Valor incorrecto a la hora de seleccionar el servidor");
+                                break;
                         }
+
                         break;
+                        
                     
                     case 2:
+
+                        nombreUsuario = "";
+                        password = "";
                         System.out.println("Ha solicitado usted iniciar sesión");
-                        System.out.println("Introduzca el nombre de usuario de la entidad");
-                        nombreUsuario = scan.nextLine();
+                        
+                        while(nombreUsuario.equals("")){
+                            System.out.println("Introduzca el nombre de usuario de la entidad");
+                            nombreUsuario = scan.nextLine();
+                            
+                        }
+                        
+                        while(password.equals("")){
+                            System.out.println("Introduzca una password");
+                            password = scan.nextLine();
+                        }
+                        
 
-                        System.out.println("Introduzca una contraseña");
-                        contraseña = scan.nextLine();
-
-                        if(gestor1.iniciarSesion(nombreUsuario,contraseña)){
+                        if(gestor1.iniciarSesion(nombreUsuario,password)){
                             System.out.println("Inicio de sesión completada");
-                            clienteRegistrado = true;
+                            clienteRegistrado = true;          
                         }
                         else{
                             System.out.println("No tenemos ningún cliente con esos datos. Compruebe que los datos son correctos o registre una nueva entidad");
@@ -95,9 +115,48 @@ public class Cliente{
                         System.out.println("0.- Salir");
                         break;
                 }
-            }
+                
+                while(clienteRegistrado){
+                    System.out.println("Ventaa de usuario registrado. Seleccione una opción");
+                    System.out.println("1.- Donar");
+                    System.out.println("2.- Consultar dinero");
+                    System.out.println("0.- Cerrar sesión");
+    
+                    opcion = scan.nextInt();
+                    switch(opcion){
+                        case 1:
+                            System.out.println("Introduzca la cantidad que desea donar");
+                            double cantidad = scan.nextDouble();
+    
+                            while(cantidad < 0.0){
+                                System.out.println("La cantidad debe ser mayor o igual que 0");
+                                System.out.println("Introduzca la cantidad que desea donar");
+                                cantidad = scan.nextDouble();
+                            }
+    
+                            if(gestor1.donar(nombreUsuario,cantidad)){
+                                System.out.println("Donacion completada. Muchas gracias");
+                            }
+                            break;
+                        
+                        case 2:
+                            System.out.println("La cantidad de dinero aportado es de " + gestor1.getTotal());
+                            break;
+                        case 0:
+                            System.out.println("Cerrando sesión");
+                            clienteRegistrado = false;
+                            inicioDeSesion = true;
+                            break;
+                    }
+                }
 
-        } catch(NotBoundException | RemoteException e) {
+
+
+            }
+            
+
+        } 
+        catch(NotBoundException | RemoteException | MalformedURLException e) {
             System.err.println("Exception del sistema: "+ e);
         }
         System.exit(0);

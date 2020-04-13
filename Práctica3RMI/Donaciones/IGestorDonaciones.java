@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 
 public interface IGestorDonaciones extends Remote{
-    public boolean registrarse(String usuario, String contraseña) throws RemoteException;
+    public boolean registrarse(String usuario, String password) throws RemoteException;
     
-    public boolean iniciarSesion (String usuario, String contraseña) throws RemoteException;
+    public boolean iniciarSesion (String usuario, String password) throws RemoteException;
     
     public boolean existeEntidad(String usuario) throws RemoteException;
     
@@ -22,6 +22,14 @@ public interface IGestorDonaciones extends Remote{
     public ArrayList<Entidad> getEntidades() throws RemoteException;
 
     public void aumentarSubtotal(double cantidad) throws RemoteException;
+
+    public double getSubTotal() throws RemoteException;
+
+    public double getTotal() throws RemoteException;
+
+    public double obtenerTotalCliente(String usuario) throws RemoteException;
+
+    public void mostrarEntidades() throws RemoteException;
 
 
 

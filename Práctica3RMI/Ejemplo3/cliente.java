@@ -31,7 +31,7 @@ public class cliente {
             long horafin = System.currentTimeMillis();
             System.out.println("Media de las RMI realizadas = "+ ((horafin -horacomienzo)/1000f)+ " msegs");
             System.out.println("RMI realizadas = "+ micontador.sumar());
-        } catch(NotBoundException | RemoteException e) {
+        } catch(NotBoundException | RemoteException  e) {
             System.err.println("Exception del sistema: "+ e);
         }
         System.exit(0);

@@ -1,6 +1,8 @@
+import java.io.Serializable;
 
-public class Entidad {
 
+public class Entidad implements Serializable {
+    private static final long serialVersionUID = 1;
     private String usuario, contraseña;
     private double dineroDonado;
 
@@ -15,7 +17,7 @@ public class Entidad {
         return this.usuario;
     }
 
-    public String getContraseña(){
+    public String getPassword(){
         return this.contraseña;
     }
 
@@ -23,7 +25,7 @@ public class Entidad {
         return this.dineroDonado;
     }
 
-    public aumentarDonacion(double d){
+    public void aumentarDonacion(double d){
         this.dineroDonado+=d;
     }
 

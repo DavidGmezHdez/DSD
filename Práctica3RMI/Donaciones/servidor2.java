@@ -14,7 +14,6 @@ public class servidor2 {
         try{
             // Crea una instancia de contador
             //System.setProperty("java.rmi.server.hostname","192.168.1.107");
-            Registry reg=LocateRegistry.createRegistry(1099);
             GestorDonaciones gestordonaciones1 = new GestorDonaciones("gestordonaciones1");
             Naming.rebind("gestordonaciones2", gestordonaciones1);
             System.out.println("Gestor de donaciones 2 preparado");
