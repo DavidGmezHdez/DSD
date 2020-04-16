@@ -49,28 +49,8 @@ public class Cliente{
                             password = scan.nextLine();
                         }
 
-
-                        System.out.println("Elija en que servidor desea registarse (1 o 2)");
-                        servidor = scan.nextInt();
-
-                        switch(servidor){
-                            case 1:
-                                if(gestor1.registrarse(nombreUsuario,password))
-                                    System.out.println("Entidad registrada en el servidor 1");
-                                else
-                                    System.out.println("Esta entidad ya está registrada en el otro servidor");
-                                break;
-                            case 2:
-                                if(gestor2.registrarse(nombreUsuario,password))
-                                    System.out.println("Entidad registrada en el servidor 2");
-                                else
-                                    System.out.println("Esta entidad ya está registrada en el otro servidor");
-                                break;
-                            default:
-                                System.out.println("Valor incorrecto a la hora de seleccionar el servidor");
-                                break;
-                        }
-
+                        if(gestor1.registrarse(nombreUsuario,password))
+                            System.out.println("Entidad registrada");
                         break;
                         
                     
@@ -141,6 +121,7 @@ public class Cliente{
                         
                         case 2:
                             System.out.println("La cantidad de dinero aportado es de " + gestor1.getTotal());
+                            System.out.println("Usted ha aportado una cantidad de " + gestor1.obtenerTotalCliente(nombreUsuario));
                             break;
                         case 0:
                             System.out.println("Cerrando sesión");
@@ -153,8 +134,6 @@ public class Cliente{
 
 
             }
-            
-
         } 
         catch(NotBoundException | RemoteException | MalformedURLException e) {
             System.err.println("Exception del sistema: "+ e);

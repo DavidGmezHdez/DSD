@@ -12,8 +12,8 @@ public interface IGestorDonaciones extends Remote{
     public boolean existeEntidad(String usuario) throws RemoteException;
     
     public Entidad obtenerEntidad() throws RemoteException;
-    
-    public IGestorDonaciones getRep() throws RemoteException;
+
+    public boolean existeRep() throws RemoteException;
 
     public boolean donar(String usuario, double cantidad) throws RemoteException;
 
@@ -31,8 +31,6 @@ public interface IGestorDonaciones extends Remote{
 
     public void mostrarEntidades() throws RemoteException;
 
-
-
-
-    
 }
+
+
