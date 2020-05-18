@@ -1,0 +1,179 @@
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Cliente</title>
+        
+        <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	</head>
+
+	<body>
+        <header class="cabecera">
+            <div class="row" id="texto-cabecera">
+                <h1>Domotineitor 3000</h1>
+            </div>
+        </header>
+
+		<div class="container">
+            <div class="row justify-content-md-center">
+                <div id="historial" class="col col-lg-4">
+                    <h5>Historial de alertas:</h5>
+                    <p><span id="alertaAire"></span></p>
+                    <p><span id="alertaLuz"></span></p>
+                    <p><span id="alertaSimultaneos"></span></p>
+                    <p><span id="alertaPlay"></span></p>
+                    <p><span id="alertaTV"></span></p>
+                    <p><span id="alertaTVPlay"></span></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                        <div class="card" style="width: 15rem;">
+                            <img src="img/aire.png" class="card-img-top">
+                            <div class="card-body">
+                              <h5 class="card-title">Aire acondicionado</h5>
+                              <p class="card-text">Estado del aire: <span id="estadoAire"></p>
+                              <button class="btn btn-primary" id="cambiarEstadoAire">Enciende/Apaga el aire</button>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card" style="width: 15rem;">
+                        <img src="img/persiana.png" class="card-img-top">
+                        <div class="card-body">
+                          <h5 class="card-title">Persiana</h5>
+                          <p class="card-text">Estado de la persiana: <span id="estadoPersiana"></span></p>
+                          <button class="btn btn-primary" id="cambiarEstadoPersiana">Sube/Baja la persiana</button>
+                        </div>
+                      </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card" style="width: 15rem;">
+                        <img src="img/play.png" class="card-img-top">
+                        <div class="card-body">
+                          <h5 class="card-title">Play Station</h5>
+                          <p class="card-text">Estado de la Play: <span id="estadoPlay"></span></p>
+                          <button class="btn btn-primary" id="cambiarEstadoPlay">Apaga/Enciende la Play</button>
+                        </div>
+                      </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card" style="width: 15rem;">
+                        <img src="img/tv.png" class="card-img-top">
+                        <div class="card-body">
+                          <h5 class="card-title">TV</h5>
+                          <p class="card-text">Estado de la TV: <span id="estadoTV"></span></p>
+                          <button class="btn btn-primary" id="cambiarEstadoTV">Apaga/Enciende la TV</button>
+                        </div>
+                      </div>
+                </div>
+            </div>
+		</div>
+	</body>
+
+	
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+
+	    
+		var serviceURL = document.URL;
+		var socket = io.connect(serviceURL);
+
+        var estadoAire = document.getElementById("estadoAire");
+        var estadoPersiana = document.getElementById("estadoPersiana");
+        var estadoPlay = document.getElementById("estadoPlay");
+        var estadoTV = document.getElementById("estadoTV");
+
+        var luz = document.getElementById("luz");
+        var temp = document.getElementById("temp");
+		var d = new Date();
+        d =  Date.now();
+
+        //Aire
+        var cambiarEstadoAire = document.getElementById("cambiarEstadoAire");
+
+        cambiarEstadoAire.onclick = function(){
+            socket.emit("cambiarEstadoAire");
+        }
+        
+        socket.on("actualizarAire",function(datos){
+            estadoAire.innerHTML = datos.estadoAire;
+            socket.emit("actualizarAlertas"); 
+        });
+
+        //Persiana
+        var cambiarEstadoPersiana = document.getElementById("cambiarEstadoPersiana");
+        
+        cambiarEstadoPersiana.onclick = function(){
+            socket.emit("cambiarEstadoPersiana");
+        }
+
+        socket.on("actualizarPersiana",function(datos){
+            estadoPersiana.innerHTML = datos.estadoPersiana;
+            socket.emit("actualizarAlertas"); 
+        });
+
+        //Play
+
+        var cambiarEstadoPlay = document.getElementById("cambiarEstadoPlay");
+        
+        cambiarEstadoPlay.onclick = function(){
+            socket.emit("cambiarEstadoPlay");
+        }
+
+        socket.on("actualizarPlay",function(datos){
+            estadoPlay.innerHTML = datos;
+            socket.emit("actualizarAlertas"); 
+        });
+
+        //TV
+        var cambiarEstadoTV = document.getElementById("cambiarEstadoTV");
+        
+        cambiarEstadoTV.onclick = function(){
+            socket.emit("cambiarEstadoTV");
+        }
+
+        socket.on("actualizarTV",function(datos){
+            estadoTV.innerHTML = datos;
+            socket.emit("actualizarAlertas"); 
+        });
+
+        //Alertas 
+        socket.on("alertaAire",function(datos){
+            var alertaAire = document.getElementById("alertaAire");
+            alertaAire.innerHTML = datos; 
+        });
+
+        socket.on("alertaLuz",function(datos){
+            var alertaLuz = document.getElementById("alertaLuz");
+            alertaLuz.innerHTML = datos; 
+        });
+
+        socket.on("alertaSimultaneos",function(datos){
+            var alertaSimultaneos = document.getElementById("alertaSimultaneos");
+            alertaSimultaneos.innerHTML = datos; 
+        });
+
+        socket.on("alertaPlay",function(datos){
+            var alertaPlay = document.getElementById("alertaPlay");
+            alertaPlay.innerHTML = datos; 
+        });
+
+        socket.on("alertaTV",function(datos){
+            var alertaTV = document.getElementById("alertaTV");
+            alertaTV.innerHTML = datos; 
+        });
+
+        socket.on("alertaTVPlay",function(datos){
+            var alertaTVPlay = document.getElementById("alertaTVPlay");
+            alertaTVPlay.innerHTML = datos; 
+        });
+
+	</script>
+</html>
