@@ -1,12 +1,12 @@
 {
-  "name": "gestor",
+  "name": "gestordomotico",
   "version": "1.0.0",
-  "description": "",
+  "description": "Gestor de una casa inteligente a través de unos datos simulados",
   "main": "servidor.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "David Gómez Hernández",
   "license": "ISC",
   "dependencies": {
     "socket.io": "^2.3.0"

@@ -16,14 +16,14 @@
 		
 		<div class="section">
 			<div class="formulario" class="form-group">
-				<form action="javascript:void(0);" class="login" onsubmit="enviarDatos()" name="datos">
+				<form action="javascript:void(0);"  class="login"  name="datos">
 					<div class="form__field">
-						<label>Inserte la temperatura (entre 15 y 30 se apaga el aire)</label>
-						<input type="number" id="temp" name="temp" class="form-control" required>
+						<label>Inserte la temperatura (entre 15 y 30 se apaga el aire, menos de 15 se pone en calor y más de 30 en frío)</label>
+						<input type="number" id="temp" class="form-control" required>
 					</div>
 					<div class="form__field">
 						<label>Inserte la cantidad de luz (menos de 10 se sube la persiana y más de 80 se baja)</label>
-						<input type="number" id="luz" name="luz" class="form-control" required>
+						<input type="number" id="luz" class="form-control" required>
 					</div>
 
 					<div class="form__field">
@@ -40,7 +40,7 @@
 							<option value="No">No</option>
 						</select>
 					</div>
-					<input type="submit" value="Enviar datos">
+					<a href="localhost:8080/cliente.hmtl"><input type="submit" onclick="enviarDatos()" value="Enviar datos"></a>
 				</form>
 			</div>
 		</div>
@@ -49,10 +49,11 @@
 	
 	<script src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript">
-			
+		var serviceURL = document.URL;
+		var socket = io.connect(serviceURL);
+		
 		function enviarDatos(){
 
-			
 			var temp = document.getElementById("temp").value;
 			var luz = document.getElementById("luz").value;
 			var play = document.getElementById("play").value;
@@ -61,10 +62,7 @@
 			var d = new Date();
 			d =  Date.now();
 
-			var socket = io.connect("http://127.0.0.1:8080");
-			socket.on("connect", function() {
-				socket.emit("agente", {temp:temp, luz:luz, time:d,play:play,tv:tv});
-			});
+			socket.emit("agente", {temp:temp, luz:luz, time:d,play:play,tv:tv});			
 		}
 	</script>
 </html>
